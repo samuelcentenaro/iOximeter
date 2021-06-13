@@ -32,7 +32,7 @@ void conecta_wifi()
   if (WiFi.status() == WL_CONNECTED)
   {
     gWifiValues.currentState = CONNECTED;
-    gDisplayValues.currentState = IN_WORKING;
+    gDisplayValues.currentState0 = IN_WORKING;
     return;
   }
 
@@ -63,17 +63,13 @@ float verifica_sinal_wifi()
   rssi_value = WiFi.RSSI();
   if (rssi_value > -55)
   {
-    bars = 5;
-  }
-  else if (rssi_value<-55 & rssi_value> - 65)
-  {
     bars = 4;
   }
-  else if (rssi_value<-65 & rssi_value> - 70)
+  else if (rssi_value<-55 & rssi_value> - 68)
   {
     bars = 3;
   }
-  else if (rssi_value<-70 & rssi_value> - 78)
+  else if (rssi_value<-68 & rssi_value> - 78)
   {
     bars = 2;
   }

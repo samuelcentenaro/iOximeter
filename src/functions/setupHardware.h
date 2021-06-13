@@ -67,7 +67,7 @@ void prvSetupHardware(void)
   }
 
   /*                     Criar lista de filas                                 */
-  fila = xQueueCreate(10, sizeof(double));
+  fila = xQueueCreate(10000, sizeof(double));
   if (fila == NULL)
   {
     Serial.println("Falha ao criar Fila. ESP será reinicializado..");
@@ -129,7 +129,7 @@ void prvSetupHardware(void)
     display.drawPixel(10, 10, SSD1306_WHITE); // Draw a single pixel in white
     display.display();
     delay(2000);
-    gDisplayValues.currentState = BOOT_SYSTEM;
+    gDisplayValues.currentState0 = BOOT_SYSTEM;
     delay(1000);
   }
 

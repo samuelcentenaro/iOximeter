@@ -19,6 +19,15 @@ enum WIFI_STATUS
   ERROR
 };
 
+enum DISPLAY_STATUS
+{
+  NO_FINGER,
+  FINGER_IN,
+  SPO2_OK,
+  SPO2_DANGER,
+  ERROR_2
+};
+
 /*
 Struts
 */
@@ -29,7 +38,8 @@ struct DisplayValues
 {
   double spo2;
   double bpm;
-  DEVICE_STATE currentState;
+  DEVICE_STATE currentState0;
+  DISPLAY_STATUS currentState1;
 };
 
 struct WifiValues
@@ -49,10 +59,10 @@ typedef struct
 /*                            Estrutura dos dados MAX10302                    */
 typedef struct
 {
-  float spo2;
-  byte valid_spo2;
-  float heartbeat;
-  byte valid_heartbeat;
+  double spo2 = 0;
+  byte valid_spo2 = 0;
+  double heartbeat = 0;
+  byte valid_heartbeat = 0;
 } data_MaxSensor;
 
 #if DEBUG == true

@@ -24,18 +24,18 @@ extern SemaphoreHandle_t mutex;
 void TaskDisplay(void *pvParameters)
 {
 
-  for (;;)
+  while (1)
   {
     xSemaphoreTake(mutex, portMAX_DELAY);
     Serial.println("OLED update...");
 
-    if (gDisplayValues.currentState == BOOT_SYSTEM)
+    if (gDisplayValues.currentState0 == BOOT_SYSTEM)
     {
       display.clearDisplay();
       drawBootScreen();
       display.display();
     }
-    else if (gDisplayValues.currentState == IN_WORKING)
+    else if (gDisplayValues.currentState0 == IN_WORKING)
     {
       display.clearDisplay();
       mainScreen();
@@ -48,7 +48,7 @@ void TaskDisplay(void *pvParameters)
     // Sleep for 1 seconds, then update display again!
     // vTaskDelay(1000 / portTICK_PERIOD_MS);
     xSemaphoreGive(mutex);
-    vTaskDelay(10 / portTICK_PERIOD_MS);
+    vTaskDelay(100 / portTICK_PERIOD_MS);
   }
 }
 

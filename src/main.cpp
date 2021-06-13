@@ -63,42 +63,43 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 DisplayValues gDisplayValues;
 WifiValues gWifiValues;
 WiFiClient client;
+data_MaxSensor gdata_MaxSensor;
 
 /*                  Sensor MAX3015 definitons and initilizing                 */
 MAX30105 particleSensor;
 
 void setup()
 {
-  /*            This function do all hardware configs                           */
-  prvSetupHardware();
+    /*            This function do all hardware configs                           */
+    prvSetupHardware();
 
-  /*                  TASKs Creations                                           */
-  xTaskCreatePinnedToCore(
-      TaskDisplay,
-      "Task_display",
-      4096,
-      NULL,
-      5,
-      &task01, 1);
+    /*                  TASKs Creations                                           */
+    xTaskCreatePinnedToCore(
+        TaskDisplay,
+        "Task_display",
+        4096,
+        NULL,
+        10,
+        &task01, 1);
 
-  xTaskCreatePinnedToCore(
-      measureSensorData,
-      "Task_Sensor",
-      10000,
-      NULL,
-      20,
-      &task02, 1);
+    xTaskCreatePinnedToCore(
+        measureSensorData,
+        "Task_Sensor",
+        10000,
+        NULL,
+        20,
+        &task02, 1);
 
-  xTaskCreatePinnedToCore(
-      TaskWifi,
-      "Task_Wifi",
-      10000,
-      NULL,
-      7,
-      &task03, PRO_CPU_NUM);
+    xTaskCreatePinnedToCore(
+        TaskWifi,
+        "Task_Wifi",
+        65536,
+        NULL,
+        15,
+        &task03, PRO_CPU_NUM);
 }
 
 void loop()
 {
-  vTaskDelay(10 / portTICK_PERIOD_MS);
+    vTaskDelay(10 / portTICK_PERIOD_MS);
 }

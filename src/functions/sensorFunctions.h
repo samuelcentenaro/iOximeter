@@ -25,6 +25,10 @@ extern MAX30105 particleSensor;
 
 extern SemaphoreHandle_t mutex;
 
+extern DisplayValues gDisplayValues;
+
+extern data_MaxSensor gdata_MaxSensor;
+
 void sensorFunction(void);
 
 double avered = 0;
@@ -42,6 +46,7 @@ const byte RATE_SIZE = 4; //Increase this for more averaging. 4 is good.
 byte rates[RATE_SIZE];    //Array of heart rates
 byte rateSpot = 0;
 long lastBeat = 0; //Time at which the last beat occurred
+
 float beatsPerMinute;
 int beatAvg;
 
@@ -62,6 +67,41 @@ void sensorFunction()
     {
       red = particleSensor.getFIFORed(); //Sparkfun's MAX30105
       ir = particleSensor.getFIFOIR();   //Sparkfun's MAX30105
+
+      if (ir < 50000)
+      {
+        gDisplayValues.currentState1 = NO_FINGER;
+        gdata_MaxSensor.valid_heartbeat = 0;
+      }
+      else
+      {
+        gDisplayValues.currentState1 = FINGER_IN;
+        gdata_MaxSensor.valid_heartbeat = 1;
+      }
+
+      /*         TESTE HEARTBEAT                                              */
+
+           if (checkForBeat(ir) == true)
+      {
+        Serial.println(beatAvg);
+        long delta = millis() - lastBeat;
+        lastBeat = millis();
+
+        beatsPerMinute = 60 / (delta / 1000.0);
+
+        if (beatsPerMinute < 255 && beatsPerMinute > 20)
+        {
+          rates[rateSpot++] = (byte)beatsPerMinute;
+          rateSpot %= RATE_SIZE;
+
+          beatAvg = 0;
+          for (byte x = 0; x < RATE_SIZE; x++)
+            beatAvg += rates[x];
+          beatAvg /= RATE_SIZE;
+        }
+      }
+
+      /*         FIM TESTE HEARTBEAR                                          */
 
       i++;
       fred = (double)red;
@@ -110,13 +150,20 @@ void sensorFunction()
         sumredrms = 0.0;
         sumirrms = 0.0;
         i = 0;
-        if (xQueueSend(fila, &ESpO2, (TickType_t)10000))
+        gdata_MaxSensor.spo2 = ESpO2;
+
+        if (xQueueSendToFront(fila, (void *)&ESpO2, (TickType_t)10000))
         {
           Serial.println("Fila Enviada");
           sensor = false;
         }
         else
+        {
           Serial.println("Fila não enviada...");
+          xQueueReset(fila);
+          sensor = false;
+        }
+
         break;
       }
       particleSensor.nextSample(); //We're finished with this sample so move to next sample

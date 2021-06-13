@@ -14,13 +14,16 @@
 #define SCL 22
 
 /*                            WiFi Credencials                                */
-#define WIFI_NETWORK "CLEANNET-AP 202"
-#define WIFI_PASSWORD "99514988"
+//#define WIFI_NETWORK "CLEANNET-AP 202"
+//#define WIFI_PASSWORD "99514988"
 
 //#define WIFI_NETWORK "Pontocomnet - TFS"
 //#define WIFI_PASSWORD "24983839"
 
-// OLED Display Definitions
+#define WIFI_NETWORK "AndroidAPB549"
+#define WIFI_PASSWORD "tnbm9422"
+
+/*                        OLED Display Definitions                            */
 #define SCREEN_WIDTH 128    // OLED display width, in pixels
 #define SCREEN_HEIGHT 64    // OLED display height, in pixels
 #define OLED_RESET -1       // Reset pin # (or -1 if sharing Arduino reset pin)
@@ -29,13 +32,10 @@
 #define TAMANHO_FILA_POSICOES_SPO2 (28800 / TEMPO_ENTRE_POSICOES_SPO2)
 
 /* definições de temporização das tarefas */
-#define TEMPO_PARA_VERIFICAR_WIFI 1000 //ms
+#define TEMPO_PARA_VERIFICAR_WIFI 30000 //ms
 #define TICKS_ESPERA_POSICAO_SPO2 (TickType_t)1000
 #define TICKS_ESPERA_ENVIO_POSICAO_SPO2 (TickType_t)10000
 #define TEMPO_ENTRE_POSICOES_SPO2 3 // time in seconds
-
-/* definições de temporização das tarefas */
-#define TEMPO_PARA_VERIFICAR_WIFI 1000 //ms
 
 /**
  * How long should we wait after a failed WiFi connection
